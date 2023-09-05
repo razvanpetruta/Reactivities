@@ -7,9 +7,9 @@ interface Props {
     name: string;
     label?: string;
     type?: string;
-}
+};
 
-export default function CustomTextInput(props: Props) {
+const CustomTextInput = (props: Props): JSX.Element => {
     const [field, meta] = useField(props.name);
 
     return (
@@ -21,4 +21,6 @@ export default function CustomTextInput(props: Props) {
             ) : null}
         </Form.Field>
     );
-}
+};
+
+export default CustomTextInput;

@@ -4,7 +4,7 @@ interface Props {
     errors: any;
 };
 
-export default function ValidationError({ errors }: Props) {
+const ValidationError = ({ errors }: Props): JSX.Element => {
     return (
         <Message error>
             {errors &&
@@ -18,4 +18,6 @@ export default function ValidationError({ errors }: Props) {
             }
         </Message>
     );
-}
+};
+
+export default ValidationError;

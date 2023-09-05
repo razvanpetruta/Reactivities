@@ -21,15 +21,15 @@ export default class CommonStore {
         )
     }
 
-    setServerError(error: ServerError) {
+    setServerError(error: ServerError): void {
         this.error = error;
     }
 
-    setToken = (token: string | null) => {
+    setToken = (token: string | null): void => {
         this.token = token;
     }
 
-    setAppLoaded = () => {
+    setAppLoaded = (): void => {
         this.appLoaded = true;
     }
-}
+};

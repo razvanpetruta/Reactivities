@@ -4,20 +4,28 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import ActivityListItemAttendee from "./ActivityListItemAttendee";
 
+const labelStyle = {
+    textAlign: "center" 
+};
+
+const itemImageStyle = {
+    marginBottom: 5 
+};
+
 interface Props {
     activity: Activity;
-}
+};
 
-export default function ActivityListItem({ activity }: Props) {
+const ActivityListItem = ({ activity }: Props): JSX.Element => {
     return (
         <Segment.Group>
             <Segment>
                 {activity.isCanceled &&
-                    <Label attached="top" color="red" content="Cancelled" style={{ textAlign: "center" }} />
+                    <Label attached="top" color="red" content="Cancelled" style={labelStyle} />
                 }
                 <Item.Group>
                     <Item>
-                        <Item.Image style={{marginBottom: 5}} size="tiny" circular src="/assets/user.png" />
+                        <Item.Image style={itemImageStyle} size="tiny" circular src="/assets/user.png" />
                         <Item.Content>
                             <Item.Header as={Link} to={`/activities/${activity.id}`}>
                                 {activity.title}
@@ -67,3 +75,5 @@ export default function ActivityListItem({ activity }: Props) {
         </Segment.Group>
     );
 };
+
+export default ActivityListItem;

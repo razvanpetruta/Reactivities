@@ -40,7 +40,7 @@ export class Activity implements IActivity {
 		this.city = init.city;
 		this.venue = init.venue;
 	}
-}
+};
 
 export class ActivityFormValues {
 	id?: string = undefined;

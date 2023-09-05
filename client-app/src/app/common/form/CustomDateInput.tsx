@@ -1,14 +1,13 @@
 import { useField } from "formik";
-import React from "react";
 import { Form, Label } from "semantic-ui-react";
 import DatePicker, { ReactDatePickerProps } from "react-datepicker";
 
-export default function CustomDateInput(props: Partial<ReactDatePickerProps>) {
+const CustomDateInput = (props: Partial<ReactDatePickerProps>): JSX.Element => {
     const [field, meta, helpers] = useField(props.name!);
 
     return (
         <Form.Field error={meta.touched && meta.error !== undefined}>
-            <DatePicker 
+            <DatePicker
                 {...field}
                 {...props}
                 selected={(field.value && new Date(field.value)) || null}
@@ -19,4 +18,6 @@ export default function CustomDateInput(props: Partial<ReactDatePickerProps>) {
             ) : null}
         </Form.Field>
     );
-}
+};
+
+export default CustomDateInput;

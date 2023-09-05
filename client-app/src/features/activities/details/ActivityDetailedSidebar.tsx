@@ -1,14 +1,17 @@
-import React from 'react'
 import { Segment, List, Label, Item, Image } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { Activity } from '../../../app/models/activity'
 
+const segmentStyle = {
+    border: 'none'
+};
+
 interface Props {
     activity: Activity;
-}
+};
 
-export default observer(function ActivityDetailedSidebar({ activity: { attendees, host } }: Props) {
+const ActivityDetailedSidebar = observer(({ activity: { attendees, host } }: Props): JSX.Element | null => {
     if (!attendees)
         return null;
 
@@ -16,7 +19,7 @@ export default observer(function ActivityDetailedSidebar({ activity: { attendees
         <>
             <Segment
                 textAlign='center'
-                style={{ border: 'none' }}
+                style={segmentStyle}
                 attached='top'
                 secondary
                 inverted
@@ -49,6 +52,7 @@ export default observer(function ActivityDetailedSidebar({ activity: { attendees
                 </List>
             </Segment>
         </>
+    );
+});
 
-    )
-})
+export default ActivityDetailedSidebar;

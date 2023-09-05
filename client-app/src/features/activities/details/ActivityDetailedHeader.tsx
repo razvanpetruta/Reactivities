@@ -19,18 +19,33 @@ const activityImageTextStyle = {
     color: 'white'
 };
 
+const labelStyle = {
+    position: "absolute",
+    zIndex: 1000,
+    left: -14,
+    top: 20
+};
+
+const segmentStyle = {
+    padding: '0'
+};
+
+const headerStyle = {
+    color: 'white'
+};
+
 interface Props {
     activity: Activity;
 };
 
-export default observer(function ActivityDetailedHeader({ activity }: Props) {
+const ActivityDetailedHeader = observer(({ activity }: Props): JSX.Element => {
     const { activityStore: { updateAttendence, loading, cancelActivityToggle } } = useStore();
 
     return (
         <Segment.Group>
-            <Segment basic attached='top' style={{ padding: '0' }}>
+            <Segment basic attached='top' style={segmentStyle}>
                 {activity.isCanceled &&
-                    <Label style={{ position: "absolute", zIndex: 1000, left: -14, top: 20 }} ribbon color="red" content="Canceled" />
+                    <Label style={labelStyle} ribbon color="red" content="Canceled" />
                 }
                 <Image src={`/assets/categoryImages/${activity.category}.jpg`} fluid style={activityImageStyle} />
                 <Segment style={activityImageTextStyle} basic>
@@ -40,7 +55,7 @@ export default observer(function ActivityDetailedHeader({ activity }: Props) {
                                 <Header
                                     size='huge'
                                     content={activity.title}
-                                    style={{ color: 'white' }}
+                                    style={headerStyle}
                                 />
                                 <p>{format(activity.date!, "dd MMM yyyy")}</p>
                                 <p>
@@ -93,5 +108,7 @@ export default observer(function ActivityDetailedHeader({ activity }: Props) {
                 )}
             </Segment>
         </Segment.Group>
-    )
-})
+    );
+});
+
+export default ActivityDetailedHeader;

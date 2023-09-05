@@ -11,13 +11,13 @@ export default class UserStore {
         makeAutoObservable(this);
     }
 
-    get isLoggedIn() {
+    get isLoggedIn(): boolean {
         return this.user !== null;
     }
 
-    login = async (credentials: UserFormValues) => {
+    login = async (credentials: UserFormValues): Promise<void> => {
         try {
-            const user = await agent.Accounts.login(credentials);
+            const user: User = await agent.Accounts.login(credentials);
             store.commonStore.setToken(user.token);
             runInAction(() => this.user = user);
             router.navigate("/activities");
@@ -27,9 +27,9 @@ export default class UserStore {
         }
     }
 
-    register = async (credentials: UserFormValues) => {
+    register = async (credentials: UserFormValues): Promise<void> => {
         try {
-            const user = await agent.Accounts.register(credentials);
+            const user: User = await agent.Accounts.register(credentials);
             store.commonStore.setToken(user.token);
             runInAction(() => this.user = user);
             router.navigate("/activities");
@@ -39,18 +39,18 @@ export default class UserStore {
         }
     }
 
-    logout = () => {
+    logout = (): void => {
         store.commonStore.setToken(null);
         this.user = null;
         router.navigate("/");
     }
 
-    getUser = async () => {
+    getUser = async (): Promise<void> => {
         try {
-            const user = await agent.Accounts.current();
+            const user: User = await agent.Accounts.current();
             runInAction(() => this.user = user);
         } catch (error) {
             console.log(error);
         }
     }
-}
+};

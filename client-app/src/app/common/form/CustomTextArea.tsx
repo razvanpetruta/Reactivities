@@ -1,5 +1,4 @@
 import { useField } from "formik";
-import React from "react";
 import { Form, Label } from "semantic-ui-react";
 
 interface Props {
@@ -7,9 +6,9 @@ interface Props {
     name: string;
     rows: number;
     label?: string;
-}
+};
 
-export default function CustomTextArea(props: Props) {
+const CustomTextArea = (props: Props): JSX.Element => {
     const [field, meta] = useField(props.name);
 
     return (
@@ -21,4 +20,6 @@ export default function CustomTextArea(props: Props) {
             ) : null}
         </Form.Field>
     );
-}
+};
+
+export default CustomTextArea;

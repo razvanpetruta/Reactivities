@@ -23,4 +23,4 @@ export const categoryOptions = [
         text: "Travel",
         value: "travel"
     }
-]
+];

@@ -1,11 +1,15 @@
-import React from "react";
 import Calendar from "react-calendar";
 import { Header, Menu } from "semantic-ui-react";
 
-export default function ActivityFilters() {
+const menuStyles = {
+    width: '100%',
+    marginTop: 28
+};
+
+const ActivityFilters = (): JSX.Element => {
     return (
         <>
-            <Menu vertical style={{ width: '100%', marginTop: 28 }}>
+            <Menu vertical style={menuStyles}>
                 <Header icon='filter' attached color="teal" content="Filters" />
                 <Menu.Item content='All Activities' />
                 <Menu.Item content="I'm going" />
@@ -15,4 +19,6 @@ export default function ActivityFilters() {
             <Calendar />
         </>
     );
-}
+};
+
+export default ActivityFilters;

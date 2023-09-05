@@ -4,7 +4,7 @@ import { Button, Header, Label } from "semantic-ui-react";
 import { useStore } from "../../app/stores/store";
 import { observer } from "mobx-react-lite";
 
-export default observer(function LoginForm() {
+const LoginForm = observer((): JSX.Element => {
     const { userStore } = useStore();
 
     return (
@@ -29,3 +29,5 @@ export default observer(function LoginForm() {
         </Formik>
     );
 });
+
+export default LoginForm;

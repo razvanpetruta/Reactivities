@@ -2,18 +2,21 @@ import { Link } from "react-router-dom";
 import { Container, Header, Segment, Image, Button } from "semantic-ui-react";
 import { useStore } from "../../app/stores/store";
 import { observer } from "mobx-react-lite";
-import { Fragment } from "react";
 import LoginForm from "../users/LoginForm";
 import RegisterForm from "../users/RegisterForm";
 
-export default observer(function HomePage() {
+const imageStyle = {
+    marginBottom: 12
+};
+
+const HomePage = observer((): JSX.Element => {
     const { userStore, modalStore } = useStore();
 
     return (
         <Segment inverted textAlign="center" vertical className="masthead">
             <Container text>
                 <Header as={"h1"} inverted>
-                    <Image size='massive' src='/assets/logo.png' alt='logo' style={{ marginBottom: 12 }} />
+                    <Image size='massive' src='/assets/logo.png' alt='logo' style={imageStyle} />
                     Reactivities
                 </Header>
                 {userStore.isLoggedIn ? (
@@ -37,3 +40,5 @@ export default observer(function HomePage() {
         </Segment>
     );
 });
+
+export default HomePage;
