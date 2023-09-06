@@ -28,7 +28,7 @@ namespace Application.Activities
             {
                 Activity activity = await _context.Activities
                     .Include(a => a.Attendees)
-                    .ThenInclude(u => u.AppUser)
+                    .ThenInclude(aa => aa.AppUser)
                     .FirstOrDefaultAsync(a => a.Id == request.Id);
 
                 if (activity == null)
