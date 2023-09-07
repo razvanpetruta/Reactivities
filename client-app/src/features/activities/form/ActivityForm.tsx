@@ -16,7 +16,7 @@ import { v4 as uuid } from "uuid";
 
 const ActivityForm = observer((): JSX.Element => {
     const { activityStore } = useStore();
-    const { createActivity, updateActivity, loadActivity, loadingInitial } = activityStore;
+    const { createActivity, updateActivity, loadActivity, loadingInitial, deselectActivity } = activityStore;
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -35,7 +35,9 @@ const ActivityForm = observer((): JSX.Element => {
         if (id) {
             loadActivity(id).then(activity => setActivity(new ActivityFormValues(activity)));
         }
-    }, [id, loadActivity]);
+
+        return () => deselectActivity();
+    }, [id, loadActivity, deselectActivity]);
 
     function handleFormSubmit(activity: ActivityFormValues) {
         if (!activity.id) {

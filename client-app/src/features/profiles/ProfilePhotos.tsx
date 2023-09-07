@@ -15,13 +15,15 @@ const ProfilePhotos = observer(({ profile }: Props): JSX.Element => {
     const { profileStore: { isCurrentUser, uploadPhoto, deletePhoto, uploading, loading, setMainPhoto }, activityStore: { loadActivities } } = useStore();
 
     const handlePhotoUpload = (file: Blob): void => {
-        uploadPhoto(file).then(() => setAddPhotoMode(false));
+        uploadPhoto(file).then(() => {
+            setAddPhotoMode(false);
+            loadActivities();
+        });
     };
 
     const handleSetMainPhoto = async (photo: IPhoto, event: SyntheticEvent<HTMLButtonElement>) => {
         setTarget(event.currentTarget.name);
-        await setMainPhoto(photo);
-        loadActivities();
+        setMainPhoto(photo).then(() => loadActivities());
     };
 
     const handleDeletePhoto = (photo: IPhoto, event: SyntheticEvent<HTMLButtonElement>) => {
