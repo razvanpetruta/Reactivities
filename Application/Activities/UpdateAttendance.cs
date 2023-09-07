@@ -30,12 +30,10 @@ namespace Application.Activities
                     .Include(a => a.Attendees)
                     .ThenInclude(aa => aa.AppUser)
                     .FirstOrDefaultAsync(a => a.Id == request.Id);
-
                 if (activity == null)
                     return null;
 
                 AppUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername());
-
                 if (user == null)
                     return null;
 

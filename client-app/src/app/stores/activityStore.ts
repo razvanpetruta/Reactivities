@@ -4,7 +4,7 @@ import agent from "../api/agent";
 import { format } from "date-fns";
 import { store } from "./store";
 import { Profile } from "../models/profile";
-import { User } from "../models/user";
+import { IUser } from "../models/user";
 
 export default class ActivityStore {
     activityRegistry: Map<string, Activity> = new Map<string, Activity>();
@@ -69,7 +69,7 @@ export default class ActivityStore {
     };
 
     private setActivity = (activity: Activity): void => {
-        const user: User | null = store.userStore.user;
+        const user: IUser | null = store.userStore.user;
         if (user) {
             activity.isGoing = activity.attendees!.some((profile: Profile) => profile.username === user.username);
             activity.isHost = activity.hostUsername === user.username;
@@ -88,7 +88,7 @@ export default class ActivityStore {
     };
 
     createActivity = async (activity: ActivityFormValues): Promise<void> => {
-        const user: User | null = store.userStore.user;
+        const user: IUser | null = store.userStore.user;
         const attendee: Profile = new Profile(user!);
         try {
             await agent.Activities.create(activity);
@@ -136,7 +136,7 @@ export default class ActivityStore {
     };
 
     updateAttendence = async (): Promise<void> => {
-        const user: User | null = store.userStore.user;
+        const user: IUser | null = store.userStore.user;
         this.loading = true;
         try {
             await agent.Activities.attend(this.selectedActivity!.id);

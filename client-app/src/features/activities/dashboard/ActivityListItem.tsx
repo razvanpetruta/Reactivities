@@ -5,11 +5,11 @@ import { format } from "date-fns";
 import ActivityListItemAttendee from "./ActivityListItemAttendee";
 
 const labelStyle = {
-    textAlign: "center" 
+    textAlign: "center"
 };
 
 const itemImageStyle = {
-    marginBottom: 5 
+    marginBottom: 5
 };
 
 interface Props {
@@ -25,13 +25,16 @@ const ActivityListItem = ({ activity }: Props): JSX.Element => {
                 }
                 <Item.Group>
                     <Item>
-                        <Item.Image style={itemImageStyle} size="tiny" circular src="/assets/user.png" />
+                        <Item.Image style={itemImageStyle} size="tiny" circular src={activity.host?.image ?? "/assets/user.png"} />
                         <Item.Content>
                             <Item.Header as={Link} to={`/activities/${activity.id}`}>
                                 {activity.title}
                             </Item.Header>
                             <Item.Description>
-                                Hosted by {activity.host?.displayName}
+                                Hosted by
+                                <Link to={`/profiles/${activity.hostUsername}`}>
+                                    {` ${activity.host?.displayName}`}
+                                </Link>
                             </Item.Description>
                             {activity.isHost && (
                                 <Item.Description>

@@ -3,7 +3,8 @@ import { Activity, ActivityFormValues } from "../models/activity";
 import { toast } from "react-toastify";
 import { router } from "../router/Routes";
 import { store } from "../stores/store";
-import { User, UserFormValues } from "../models/user";
+import { IUser, IUserFormValues } from "../models/user";
+import { IPhoto, Profile } from "../models/profile";
 
 const sleep = (delay: number): Promise<any> => {
     return new Promise((resolve) => {
@@ -83,14 +84,31 @@ const Activities = {
 };
 
 const Accounts = {
-    current: () => requests.get<User>("/account"),
-    login: (user: UserFormValues) => requests.post<User>("/account/login", user),
-    register: (user: UserFormValues) => requests.post<User>("/account/register", user)
+    current: () => requests.get<IUser>("/account"),
+    login: (user: IUserFormValues) => requests.post<IUser>("/account/login", user),
+    register: (user: IUserFormValues) => requests.post<IUser>("/account/register", user)
+};
+
+const Profiles = {
+    get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
+    uploadPhoto: (file: Blob) => {
+        let formData = new FormData();
+        formData.append("File", file);
+
+        return axios.post<IPhoto>("/photos", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        });
+    },
+    setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
+    deletePhoto: (id: string) => requests.delete(`/photos/${id}`)
 };
 
 const agent = {
     Activities,
-    Accounts
+    Accounts,
+    Profiles
 };
 
 export default agent;
