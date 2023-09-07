@@ -12,15 +12,16 @@ interface Props {
 const ProfilePhotos = observer(({ profile }: Props): JSX.Element => {
     const [addPhotoMode, setAddPhotoMode] = useState<boolean>(false);
     const [target, setTarget] = useState<string>("");
-    const { profileStore: { isCurrentUser, uploadPhoto, deletePhoto, uploading, loading, setMainPhoto } } = useStore();
+    const { profileStore: { isCurrentUser, uploadPhoto, deletePhoto, uploading, loading, setMainPhoto }, activityStore: { loadActivities } } = useStore();
 
     const handlePhotoUpload = (file: Blob): void => {
         uploadPhoto(file).then(() => setAddPhotoMode(false));
     };
 
-    const handleSetMainPhoto = (photo: IPhoto, event: SyntheticEvent<HTMLButtonElement>) => {
+    const handleSetMainPhoto = async (photo: IPhoto, event: SyntheticEvent<HTMLButtonElement>) => {
         setTarget(event.currentTarget.name);
-        setMainPhoto(photo);
+        await setMainPhoto(photo);
+        loadActivities();
     };
 
     const handleDeletePhoto = (photo: IPhoto, event: SyntheticEvent<HTMLButtonElement>) => {
