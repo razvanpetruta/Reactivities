@@ -177,4 +177,20 @@ export default class ActivityStore {
     deselectActivity = (): void => {
         this.selectedActivity = undefined;
     }
+
+    resetStore = (): void => {
+        this.selectedActivity = undefined;
+        this.activityRegistry = new Map<string, Activity>();
+    }
+
+    updateAttendeeFollowing = (username: string): void => {
+        this.activityRegistry.forEach((activity: Activity) => {
+            activity.attendees.forEach((attendee: Profile) => {
+                if (attendee.username === username) {
+                    attendee.following ? attendee.followersCount-- : attendee.followersCount++;
+                    attendee.following = !attendee.following;
+                }
+            });
+        });
+    }
 }

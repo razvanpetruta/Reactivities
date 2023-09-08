@@ -10,13 +10,15 @@ import LoadingComponent from "../../app/layout/LoadingComponent";
 const ProfilePage = observer((): JSX.Element => {
     const { username } = useParams<{ username: string }>();
     const { profileStore } = useStore();
-    const { loadingProfile, loadProfile, profile } = profileStore;
+    const { loadingProfile, loadProfile, profile, setActiveTab } = profileStore;
 
     useEffect(() => {
         if (!username)
             return;
 
         loadProfile(username);
+
+        return () => setActiveTab(0);
     }, [loadProfile, username]);
 
     if (loadingProfile)
@@ -31,7 +33,6 @@ const ProfilePage = observer((): JSX.Element => {
                         <ProfileContent profile={profile} />
                     </>
                 }
-
             </Grid.Column>
         </Grid>
     );
