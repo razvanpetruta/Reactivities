@@ -4,7 +4,7 @@ namespace Application.Profiles
 {
     public class UserActivityDTO
     {
-        public Guid ActivityId { get; set; }
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Category { get; set; }
         public DateTime Date { get; set; }

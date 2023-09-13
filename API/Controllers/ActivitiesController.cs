@@ -14,7 +14,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetActivity(Guid id)
+        public async Task<IActionResult> GetActivity([FromRoute] Guid id)
         {
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
@@ -27,7 +27,7 @@ namespace API.Controllers
 
         [Authorize(Policy = "IsActivityHost")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditActivity(Guid id, [FromBody] Activity activity)
+        public async Task<IActionResult> EditActivity([FromRoute] Guid id, [FromBody] Activity activity)
         {
             activity.Id = id;
             return HandleResult(await Mediator.Send(new Edit.Command { Activity = activity }));
@@ -35,13 +35,13 @@ namespace API.Controllers
 
         [Authorize(Policy = "IsActivityHost")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteActivity(Guid id)
+        public async Task<IActionResult> DeleteActivity([FromRoute] Guid id)
         {
             return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
 
         [HttpPost("{id}/attend")]
-        public async Task<IActionResult> Attend(Guid id)
+        public async Task<IActionResult> Attend([FromRoute] Guid id)
         {
             return HandleResult(await Mediator.Send(new UpdateAttendance.Command { Id = id }));
         }

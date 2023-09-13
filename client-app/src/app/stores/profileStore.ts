@@ -1,5 +1,5 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
-import { IPhoto, Profile } from "../models/profile";
+import { IPhoto, IUserActivity, Profile } from "../models/profile";
 import agent from "../api/agent";
 import { store } from "./store";
 import { AxiosResponse } from "axios";
@@ -11,7 +11,9 @@ export default class ProfileStore {
     loading: boolean = false;
     followings: Profile[] = [];
     loadingFollowings: boolean = false;
-    activeTab: number = 0; 
+    activeTab: number = 0;
+    userActivities: IUserActivity[] = [];
+    loadingActivities: boolean = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -19,7 +21,7 @@ export default class ProfileStore {
         reaction(
             () => this.activeTab,
             activeTab => {
-                if (activeTab === 3 || activeTab ===4) {
+                if (activeTab === 3 || activeTab === 4) {
                     const predicate = activeTab === 3 ? "followers" : "following";
                     this.loadFollowings(predicate);
                 } else {
@@ -96,7 +98,7 @@ export default class ProfileStore {
         }
     }
 
-    deletePhoto = async (photo: IPhoto) => {
+    deletePhoto = async (photo: IPhoto): Promise<void> => {
         this.loading = true;
         try {
             await agent.Profiles.deletePhoto(photo.id);
@@ -113,7 +115,7 @@ export default class ProfileStore {
         }
     }
 
-    updateProfile = async (profile: Partial<Profile>) => {
+    updateProfile = async (profile: Partial<Profile>): Promise<void> => {
         try {
             await agent.Profiles.updateProfile(profile);
             runInAction(() => {
@@ -127,7 +129,7 @@ export default class ProfileStore {
         }
     }
 
-    updateFollowing = async (username: string, following: boolean) => {
+    updateFollowing = async (username: string, following: boolean): Promise<void> => {
         this.loading = true;
         try {
             await agent.Profiles.updateFollowing(username);
@@ -154,7 +156,7 @@ export default class ProfileStore {
         }
     }
 
-    loadFollowings = async (predicate: string) => {
+    loadFollowings = async (predicate: string): Promise<void> => {
         this.loadingFollowings = true;
         try {
             const followings: Profile[] = await agent.Profiles.listFollowings(this.profile!.username, predicate);
@@ -165,6 +167,18 @@ export default class ProfileStore {
             console.log(error);
         } finally {
             runInAction(() => this.loadingFollowings = false);
+        }
+    }
+
+    loadUserActivities = async (username: string, predicate: string): Promise<void> => {
+        this.loadingActivities = true;
+        try {
+            const activities: IUserActivity[] = await agent.Profiles.listActivities(username, predicate);
+            runInAction(() => this.userActivities = activities);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            runInAction(() => this.loadingActivities = false);
         }
     }
 };

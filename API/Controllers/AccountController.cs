@@ -23,7 +23,7 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO)
+        public async Task<ActionResult<UserDTO>> Login([FromBody] LoginDTO loginDTO)
         {
             AppUser user = await _userManager.Users
                 .Include(u => u.Photos)
@@ -43,7 +43,7 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
+        public async Task<ActionResult<UserDTO>> Register([FromBody] RegisterDTO registerDTO)
         {
             if (await _userManager.Users.AnyAsync(user => user.Email == registerDTO.Email))
             {

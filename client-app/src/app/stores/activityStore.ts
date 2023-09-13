@@ -127,11 +127,11 @@ export default class ActivityStore {
             runInAction(() => {
                 this.selectedActivity = activity;
             });
-            this.setLoadingInitial(false);
             return activity;
         } catch (error) {
-            this.setLoadingInitial(false);
             console.log(error);
+        } finally {
+            this.setLoadingInitial(false);
         }
     };
 

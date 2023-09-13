@@ -30,7 +30,7 @@ const ProfilePage = observer((): JSX.Element => {
                 {profile &&
                     <>
                         <ProfileHeader profile={profile} />
-                        <ProfileContent profile={profile} />
+                        <ProfileContent />
                     </>
                 }
             </Grid.Column>
