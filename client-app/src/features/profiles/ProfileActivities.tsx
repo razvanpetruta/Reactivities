@@ -16,7 +16,7 @@ interface IPaneElement {
     pane: {
         key: string;
     };
-};
+}
 
 const panes: IPaneElement[] = [
     {
@@ -50,7 +50,7 @@ const ProfileActivities = observer((): JSX.Element => {
         loadUserActivities(profile.username, "future");
     }, [loadUserActivities, profile]);
 
-    const handleTabChange = (event: SyntheticEvent, data: TabProps): void => {
+    const handleTabChange = (_event: SyntheticEvent, data: TabProps): void => {
         loadUserActivities(profile!.username, panes[data.activeIndex as number].pane.key)
     };
 

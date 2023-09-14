@@ -13,7 +13,7 @@ interface Store {
     modalStore: ModalStore;
     profileStore: ProfileStore;
     commentStore: CommentStore;
-};
+}
 
 export const store: Store = {
     activityStore: new ActivityStore(),
@@ -26,6 +26,6 @@ export const store: Store = {
 
 export const StoreContext = createContext(store);
 
-export function useStore() {
+export const useStore = (): Store => {
     return useContext(StoreContext);
 };

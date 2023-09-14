@@ -5,7 +5,7 @@ import { Button, Grid, Header, Tab } from "semantic-ui-react";
 import ProfileEditForm from "./ProfileEditForm";
 
 const spanStyle = {
-    whiteSpace: "pre-wrap" as "pre-wrap"
+    whiteSpace: "pre-wrap" as const
 };
 
 const ProfileAbout = observer((): JSX.Element => {

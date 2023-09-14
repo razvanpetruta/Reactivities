@@ -1,5 +1,4 @@
 import { useField } from "formik";
-import React from "react";
 import { Form, Label } from "semantic-ui-react";
 
 interface Props {
@@ -7,7 +6,7 @@ interface Props {
     name: string;
     label?: string;
     type?: string;
-};
+}
 
 const CustomTextInput = (props: Props): JSX.Element => {
     const [field, meta] = useField(props.name);

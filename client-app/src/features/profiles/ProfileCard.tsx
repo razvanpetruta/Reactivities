@@ -10,7 +10,7 @@ const cardStyle = {
 
 interface Props {
     profile: Profile;
-};
+}
 
 const ProfileCard = observer(({ profile }: Props): JSX.Element => {
     const truncate = (text: string | undefined): string => {

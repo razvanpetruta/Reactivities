@@ -26,10 +26,10 @@ namespace API.Extensions
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
                     policy
-                        .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .AllowCredentials()
-                        .WithOrigins("http://localhost:3000");
+                        .AllowAnyMethod()
+                        .WithOrigins("http://localhost:3000")
+                        .AllowCredentials();
                 });
             });
             services.AddMediatR(typeof(List.Handler));

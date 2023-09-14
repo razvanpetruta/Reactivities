@@ -3,7 +3,7 @@ export interface IPagination {
     itemsPerPage: number;
     totalItems: number;
     totalPages: number;
-};
+}
 
 export class PaginatedResult<T> {
     data: T;
@@ -13,7 +13,7 @@ export class PaginatedResult<T> {
         this.data = data;
         this.pagination = pagination;
     }
-};
+}
 
 export class PagingParams {
     pageNumber: number;
@@ -23,4 +23,4 @@ export class PagingParams {
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
     }
-};
+}

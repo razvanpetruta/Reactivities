@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import { Segment, Header, Comment, Button, Loader } from 'semantic-ui-react';
+import { Segment, Header, Comment, Loader } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 import { useEffect } from 'react';
 import { IChatComment } from '../../../app/models/comment';
@@ -13,16 +13,16 @@ const segmentStyle = {
 };
 
 const fieldDivStyle = {
-    position: "relative" as "relative"
+    position: "relative" as const
 };
 
 const commentTextStyle = {
-    whiteSpace: "pre-wrap" as "pre-wrap"
+    whiteSpace: "pre-wrap" as const
 };
 
 interface Props {
     activityId: string;
-};
+}
 
 const ActivityDetailedChat = observer(({ activityId }: Props): JSX.Element => {
     const { commentStore } = useStore();

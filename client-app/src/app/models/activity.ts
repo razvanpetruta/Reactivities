@@ -14,7 +14,7 @@ export interface IActivity {
 	isHost: boolean;
 	host?: Profile;
 	attendees: Profile[];
-};
+}
 
 export class Activity implements IActivity {
 	id: string;
@@ -40,7 +40,7 @@ export class Activity implements IActivity {
 		this.city = init.city;
 		this.venue = init.venue;
 	}
-};
+}
 
 export class ActivityFormValues {
 	id?: string = undefined;
@@ -62,4 +62,4 @@ export class ActivityFormValues {
 			this.venue = activity.venue;
 		}
 	}
-};
+}

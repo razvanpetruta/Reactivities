@@ -32,4 +32,4 @@ export default class CommonStore {
     setAppLoaded = (): void => {
         this.appLoaded = true;
     }
-};
+}

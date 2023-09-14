@@ -247,7 +247,8 @@ export default class ActivityStore {
 
     resetStore = (): void => {
         this.selectedActivity = undefined;
-        this.activityRegistry = new Map<string, Activity>();
+        this.activityRegistry.clear();
+        this.pagingParams = new PagingParams();
     }
 
     updateAttendeeFollowing = (username: string): void => {

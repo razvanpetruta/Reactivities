@@ -1,4 +1,3 @@
-import { Fragment } from 'react';
 import { Segment, Button, Placeholder } from 'semantic-ui-react';
 
 const placeholderStyle = {

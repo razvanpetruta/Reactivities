@@ -14,7 +14,7 @@ const itemImageStyle = {
 
 interface Props {
     activity: Activity;
-};
+}
 
 const ActivityListItem = ({ activity }: Props): JSX.Element => {
     return (
@@ -57,6 +57,7 @@ const ActivityListItem = ({ activity }: Props): JSX.Element => {
             <Segment>
                 <span>
                     <Icon name="clock" /> {format(activity.date!, "dd MMM yyyy HH:mm")}
+                    <br />
                     <Icon name="marker" /> {activity.venue}
                 </span>
             </Segment>

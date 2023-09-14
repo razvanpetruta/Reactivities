@@ -9,7 +9,7 @@ const cropperStyle = {
 interface Props {
     imagePreview: string;
     setCropper: (cropper: Cropper) => void;
-};
+}
 
 const PhotoWidgetCropper = ({ imagePreview, setCropper }: Props): JSX.Element => {
     return (

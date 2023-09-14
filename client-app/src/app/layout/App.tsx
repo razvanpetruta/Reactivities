@@ -4,7 +4,7 @@ import NavBar from "./NavBar";
 import LoadingComponent from "./LoadingComponent";
 import { useStore } from "../stores/store";
 import { observer } from "mobx-react-lite";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, ScrollRestoration, useLocation } from "react-router-dom";
 import HomePage from "../../features/home/HomePage";
 import { ToastContainer } from "react-toastify";
 import ModalContainer from "../common/modals/ModalContainer";
@@ -13,7 +13,7 @@ const containerStyle = {
     marginTop: "7rem"
 };
 
-function App() {
+const App = (): JSX.Element => {
     const location = useLocation();
     const { commonStore, userStore } = useStore();
 
@@ -30,6 +30,7 @@ function App() {
 
     return (
         <>
+            <ScrollRestoration />
             <ModalContainer />
             <ToastContainer position="bottom-right" theme="colored" />
             {location.pathname === '/' ? <HomePage /> : (

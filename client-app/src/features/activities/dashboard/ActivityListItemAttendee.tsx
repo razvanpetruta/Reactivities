@@ -11,7 +11,7 @@ const imageStyle = {
 
 interface Props {
     attendees: Profile[];
-};
+}
 
 const ActivityListItemAttendee = observer(({ attendees }: Props): JSX.Element => {
     return (

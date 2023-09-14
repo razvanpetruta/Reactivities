@@ -9,7 +9,7 @@ const segmentStyle = {
 
 interface Props {
     activity: Activity;
-};
+}
 
 const ActivityDetailedSidebar = observer(({ activity: { attendees, host } }: Props): JSX.Element | null => {
     if (!attendees)

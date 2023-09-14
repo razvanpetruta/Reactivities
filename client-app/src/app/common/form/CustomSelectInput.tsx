@@ -4,9 +4,12 @@ import { Form, Label, Select } from "semantic-ui-react";
 interface Props {
     placeholder: string;
     name: string;
-    options: any;
+    options: {
+        text: string;
+        value: string;
+    }[];
     label?: string;
-};
+}
 
 const CustomSelectInput = (props: Props): JSX.Element => {
     const [field, meta, helpers] = useField(props.name);

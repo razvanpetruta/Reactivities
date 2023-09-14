@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { Card, Header, Tab, Image, Grid, Button } from "semantic-ui-react";
-import { IPhoto, Profile } from "../../app/models/profile";
+import { IPhoto } from "../../app/models/profile";
 import { useStore } from "../../app/stores/store";
 import { SyntheticEvent, useState } from "react";
 import PhotoUploadWidget from "../../app/common/imageUpload/PhotoUploadWidget";
@@ -8,7 +8,7 @@ import PhotoUploadWidget from "../../app/common/imageUpload/PhotoUploadWidget";
 const ProfilePhotos = observer((): JSX.Element => {
     const [addPhotoMode, setAddPhotoMode] = useState<boolean>(false);
     const [target, setTarget] = useState<string>("");
-    const { profileStore: { profile, isCurrentUser, uploadPhoto, deletePhoto, uploading, loading, setMainPhoto }, activityStore: { loadActivities } } = useStore();
+    const { profileStore: { profile, isCurrentUser, uploadPhoto, deletePhoto, uploading, loading, setMainPhoto }, activityStore: { loadActivities, resetStore } } = useStore();
 
     const handlePhotoUpload = (file: Blob): void => {
         uploadPhoto(file).then(() => {
@@ -19,7 +19,10 @@ const ProfilePhotos = observer((): JSX.Element => {
 
     const handleSetMainPhoto = async (photo: IPhoto, event: SyntheticEvent<HTMLButtonElement>) => {
         setTarget(event.currentTarget.name);
-        setMainPhoto(photo).then(() => loadActivities());
+        setMainPhoto(photo).then(() => {
+            resetStore();
+            loadActivities();
+        });
     };
 
     const handleDeletePhoto = (photo: IPhoto, event: SyntheticEvent<HTMLButtonElement>) => {

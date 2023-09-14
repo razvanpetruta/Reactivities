@@ -1,6 +1,6 @@
 import { ErrorMessage, Form, Formik } from "formik";
 import CustomTextInput from "../../app/common/form/CustomTextInput";
-import { Button, Header, Label } from "semantic-ui-react";
+import { Button, Header } from "semantic-ui-react";
 import { useStore } from "../../app/stores/store";
 import { observer } from "mobx-react-lite";
 import * as Yup from "yup";
@@ -31,7 +31,7 @@ const RegisterForm = observer((): JSX.Element => {
                     <CustomTextInput placeholder="Password" name="password" type="password" />
                     <ErrorMessage
                         name="error"
-                        render={() => <ValidationError errors={errors.error} />}
+                        render={() => <ValidationError errors={[errors.error as string]} />}
                     />
                     <Button
                         loading={isSubmitting}

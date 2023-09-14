@@ -3,7 +3,7 @@ import { makeAutoObservable } from "mobx";
 interface Modal {
     open: boolean;
     body: JSX.Element | null;
-};
+}
 
 export default class ModalStore {
     modal: Modal = {
@@ -24,4 +24,4 @@ export default class ModalStore {
         this.modal.open = false;
         this.modal.body = null;
     }
-};
+}

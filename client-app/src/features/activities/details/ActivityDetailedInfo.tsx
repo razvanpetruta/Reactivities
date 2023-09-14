@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 
 interface Props {
     activity: Activity
-};
+}
 
 const ActivityDetailedInfo = observer(({ activity }: Props): JSX.Element => {
     return (

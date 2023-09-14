@@ -10,7 +10,7 @@ const contentStyle = {
 
 interface Props {
     profile: Profile;
-};
+}
 
 const FollowButton = observer(({ profile }: Props): JSX.Element | null => {
     const { profileStore, userStore } = useStore();

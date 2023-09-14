@@ -9,7 +9,7 @@ export interface IProfile {
     followingsCount: number;
     following: boolean;
     photos?: IPhoto[];
-};
+}
 
 export class Profile implements IProfile {
     username: string;
@@ -26,17 +26,17 @@ export class Profile implements IProfile {
         this.displayName = user.displayName;
         this.image = user.image;
     }
-};
+}
 
 export interface IPhoto {
     id: string;
     url: string;
     isMain: boolean;
-};
+}
 
 export interface IUserActivity {
     id: string;
     title: string;
     category: string;
     date: Date;
-};
+}

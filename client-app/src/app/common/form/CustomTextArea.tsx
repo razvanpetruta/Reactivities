@@ -6,7 +6,7 @@ interface Props {
     name: string;
     rows: number;
     label?: string;
-};
+}
 
 const CustomTextArea = (props: Props): JSX.Element => {
     const [field, meta] = useField(props.name);

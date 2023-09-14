@@ -5,4 +5,4 @@ export interface IChatComment {
     username: string;
     displayName: string;
     image: string;
-};
+}

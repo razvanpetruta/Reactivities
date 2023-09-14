@@ -7,15 +7,15 @@ import { IUser, IUserFormValues } from "../models/user";
 import { IPhoto, IUserActivity, Profile } from "../models/profile";
 import { PaginatedResult } from "../models/pagination";
 
-const sleep = (delay: number): Promise<any> => {
+const sleep = (delay: number): Promise<unknown> => {
     return new Promise((resolve) => {
         setTimeout(resolve, delay);
     });
 };
 
-axios.defaults.baseURL = "http://localhost:5000/api";
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
-axios.interceptors.request.use((config: InternalAxiosRequestConfig<any>) => {
+axios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     const token: string | null = store.commonStore.token;
     if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -26,11 +26,12 @@ axios.interceptors.request.use((config: InternalAxiosRequestConfig<any>) => {
 
 axios.interceptors.response.use(
     async (response: AxiosResponse): Promise<AxiosResponse> => {
-        await sleep(1000);
+        if (import.meta.env.DEV) 
+            await sleep(1000);
         const pagination = response.headers["pagination"];
         if (pagination) {
             response.data = new PaginatedResult(response.data, JSON.parse(pagination));
-            return response as AxiosResponse<PaginatedResult<any>>;
+            return response as AxiosResponse<PaginatedResult<unknown>>;
         }
         return response;
     },
@@ -38,7 +39,7 @@ axios.interceptors.response.use(
         const { data, status, config } = error.response as AxiosResponse;
         switch (status) {
             case 400:
-                if (config.method === "get" && data.errors.hasOwnProperty("id")) {
+                if (config.method === "get" && Object.prototype.hasOwnProperty.call(data.errors, "id")) {
                     router.navigate("/not-found");
                 }
                 if (data.errors) {
@@ -75,8 +76,8 @@ const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const requests = {
     get: <T>(url: string) => axios.get<T>(url).then(responseBody),
-    post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
-    put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
+    post: <T>(url: string, body: object) => axios.post<T>(url, body).then(responseBody),
+    put: <T>(url: string, body: object) => axios.put<T>(url, body).then(responseBody),
     delete: <T>(url: string) => axios.delete<T>(url).then(responseBody)
 };
 
@@ -99,7 +100,7 @@ const Accounts = {
 const Profiles = {
     get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
     uploadPhoto: (file: Blob) => {
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append("File", file);
 
         return axios.post<IPhoto>("/photos", formData, {

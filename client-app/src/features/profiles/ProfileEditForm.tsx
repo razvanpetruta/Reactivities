@@ -8,7 +8,7 @@ import { Button } from "semantic-ui-react";
 
 interface Props {
     setEditMode: (editMode: boolean) => void;
-};
+}
 
 const ProfileEditForm = observer(({ setEditMode }: Props): JSX.Element => {
     const { profileStore: { profile, updateProfile } } = useStore();

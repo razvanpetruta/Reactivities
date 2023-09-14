@@ -4,31 +4,31 @@ import axios from 'axios';
 import ValidationError from './ValidationError';
 
 const TestErrors = (): JSX.Element => {
-    const baseUrl = 'http://localhost:5000/api/'
-    const [errors, setErrors] = useState(null);
+    const baseUrl = import.meta.env.VITE_API_URL;
+    const [errors, setErrors] = useState<string[]>([]);
 
     const handleNotFound = (): void => {
-        axios.get(baseUrl + 'buggy/not-found').catch(err => console.log(err.response));
+        axios.get(baseUrl + '/buggy/not-found').catch(err => console.log(err.response));
     };
 
     const handleBadRequest = (): void => {
-        axios.get(baseUrl + 'buggy/bad-request').catch(err => console.log(err.response));
+        axios.get(baseUrl + '/buggy/bad-request').catch(err => console.log(err.response));
     };
 
     const handleServerError = (): void => {
-        axios.get(baseUrl + 'buggy/server-error').catch(err => console.log(err.response));
+        axios.get(baseUrl + '/buggy/server-error').catch(err => console.log(err.response));
     };
 
     const handleUnauthorised = (): void => {
-        axios.get(baseUrl + 'buggy/unauthorised').catch(err => console.log(err.response));
+        axios.get(baseUrl + '/buggy/unauthorised').catch(err => console.log(err.response));
     };
 
     const handleBadGuid = (): void => {
-        axios.get(baseUrl + 'activities/notaguid').catch(err => console.log(err.response));
+        axios.get(baseUrl + '/activities/notaguid').catch(err => console.log(err.response));
     };
 
     const handleValidationError = (): void => {
-        axios.post(baseUrl + 'activities', {}).catch(err => setErrors(err));
+        axios.post(baseUrl + '/activities', {}).catch(err => setErrors(err));
     };
 
     return (
@@ -44,7 +44,7 @@ const TestErrors = (): JSX.Element => {
                     <Button onClick={handleBadGuid} content='Bad Guid' basic primary />
                 </Button.Group>
             </Segment>
-            {errors && <ValidationError errors={errors} />}
+            {errors.length > 0 && <ValidationError errors={errors} />}
         </>
     );
 };

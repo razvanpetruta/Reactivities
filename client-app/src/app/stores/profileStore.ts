@@ -2,7 +2,6 @@ import { makeAutoObservable, reaction, runInAction } from "mobx";
 import { IPhoto, IUserActivity, Profile } from "../models/profile";
 import agent from "../api/agent";
 import { store } from "./store";
-import { AxiosResponse } from "axios";
 
 export default class ProfileStore {
     profile: Profile | null = null;
@@ -60,7 +59,7 @@ export default class ProfileStore {
     uploadPhoto = async (file: Blob): Promise<void> => {
         this.uploading = true;
         try {
-            const response: AxiosResponse<IPhoto, any> = await agent.Profiles.uploadPhoto(file);
+            const response = await agent.Profiles.uploadPhoto(file);
             const photo: IPhoto = response.data;
             runInAction(() => {
                 if (!this.profile)
@@ -181,4 +180,4 @@ export default class ProfileStore {
             runInAction(() => this.loadingActivities = false);
         }
     }
-};
+}
