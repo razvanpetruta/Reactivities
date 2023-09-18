@@ -35,6 +35,7 @@ namespace API.Controllers
             bool result = await _userManager.CheckPasswordAsync(user, loginDTO.Password);
             if (result)
             {
+                await SetRefreshToken(user);
                 return CreateUserObject(user);
             }
 
@@ -67,6 +68,7 @@ namespace API.Controllers
             IdentityResult result = await _userManager.CreateAsync(user, registerDTO.Password);
             if (result.Succeeded)
             {
+                await SetRefreshToken(user);
                 return CreateUserObject(user);
             }
 
@@ -81,6 +83,31 @@ namespace API.Controllers
                 .Include(u => u.Photos)
                 .FirstOrDefaultAsync(u => u.Email == User.FindFirstValue(ClaimTypes.Email));
 
+            await SetRefreshToken(user);
+
+            return CreateUserObject(user);
+        }
+
+        [Authorize]
+        [HttpPost("refreshToken")]
+        public async Task<ActionResult<UserDTO>> RefreshToken()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            var user = await _userManager.Users
+                .Include(u => u.Photos)
+                .Include(u => u.RefreshTokens)
+                .FirstOrDefaultAsync(u => u.UserName == User.FindFirstValue(ClaimTypes.Name));
+
+            if (user == null)
+                return Unauthorized();
+
+            var oldToken = user.RefreshTokens.SingleOrDefault(u => u.Token == refreshToken);
+            if (oldToken != null && !oldToken.IsActive)
+                return Unauthorized();
+
+            if (oldToken != null)
+                oldToken.Revoked = DateTime.UtcNow;
+
             return CreateUserObject(user);
         }
 
@@ -93,6 +120,21 @@ namespace API.Controllers
                 Token = _tokenService.CreateToken(user),
                 Username = user.UserName
             };
+        }
+
+        private async Task SetRefreshToken(AppUser user)
+        {
+            RefreshToken refreshToken = _tokenService.GenerateRefreshToken();
+            user.RefreshTokens.Add(refreshToken);
+
+            await _userManager.UpdateAsync(user);
+
+            CookieOptions cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddDays(7)
+            };
+            Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
         }
     }
 }
