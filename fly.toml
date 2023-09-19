@@ -16,6 +16,7 @@ primary_region = "otp"
   ASPNETCORE_URLS="http://+:8080"
   Cloudinary__CloudName="drc9snsil"
   Cloudinary__ApiKey="257136584963489"
+  Sendgrid__User="reactdevelopment"
 
 [experimental]
   allowed_public_ports = []

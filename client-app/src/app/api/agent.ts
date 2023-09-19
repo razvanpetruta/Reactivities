@@ -100,7 +100,11 @@ const Accounts = {
     current: () => requests.get<IUser>("/account"),
     login: (user: IUserFormValues) => requests.post<IUser>("/account/login", user),
     register: (user: IUserFormValues) => requests.post<IUser>("/account/register", user),
-    refreshToken: () => requests.post<IUser>("/account/refreshToken", {})
+    refreshToken: () => requests.post<IUser>("/account/refreshToken", {}),
+    verifyEmail: (token: string, email: string) => 
+        requests.post<void>(`/account/verifyEmail?token=${token}&email=${email}`, {}),
+    resendEmailConfirmation: (email: string) =>
+        requests.get(`/account/resendEmailConfirmationLink?email=${email}`)
 };
 
 const Profiles = {
