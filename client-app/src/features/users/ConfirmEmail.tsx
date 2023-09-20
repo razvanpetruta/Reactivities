@@ -8,7 +8,7 @@ import LoginForm from "./LoginForm";
 import { observer } from "mobx-react-lite";
 
 const ConfirmEmail = observer((): JSX.Element => {
-    const {modalStore} = useStore();
+    const { modalStore } = useStore();
     const email: string = useQuery().get("email") as string;
     const token: string = useQuery().get("token") as string;
 
@@ -27,7 +27,6 @@ const ConfirmEmail = observer((): JSX.Element => {
     };
 
     useEffect(() => {
-        console.log("oke");
         agent.Accounts.verifyEmail(token, email).then(() => {
             setStatus(Status.Success);
         }).catch(() => {

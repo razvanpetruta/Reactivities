@@ -26,7 +26,7 @@ axios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 
 axios.interceptors.response.use(
     async (response: AxiosResponse): Promise<AxiosResponse> => {
-        if (import.meta.env.DEV) 
+        if (import.meta.env.DEV)
             await sleep(1000);
         const pagination = response.headers["pagination"];
         if (pagination) {
@@ -101,10 +101,13 @@ const Accounts = {
     login: (user: IUserFormValues) => requests.post<IUser>("/account/login", user),
     register: (user: IUserFormValues) => requests.post<IUser>("/account/register", user),
     refreshToken: () => requests.post<IUser>("/account/refreshToken", {}),
-    verifyEmail: (token: string, email: string) => 
+    verifyEmail: (token: string, email: string) =>
         requests.post<void>(`/account/verifyEmail?token=${token}&email=${email}`, {}),
     resendEmailConfirmation: (email: string) =>
-        requests.get(`/account/resendEmailConfirmationLink?email=${email}`)
+        requests.get(`/account/resendEmailConfirmationLink?email=${email}`),
+    forgotPassword: (email: string) => requests.post<void>(`/account/forgotPassword?email=${email}`, {}),
+    resetPassword: (token: string, email: string, newPassword: string) =>
+        requests.post<void>(`/account/resetPassword?token=${token}&email=${email}`, { newPassword: newPassword })
 };
 
 const Profiles = {

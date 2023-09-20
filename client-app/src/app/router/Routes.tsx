@@ -10,6 +10,8 @@ import ProfilePage from '../../features/profiles/ProfilePage';
 import RequireAuth from './RequireAuth';
 import RegisterSuccess from '../../features/users/RegisterSuccess';
 import ConfirmEmail from '../../features/users/ConfirmEmail';
+import ForgotPassword from '../../features/users/ForgotPassword';
+import ResetPassword from '../../features/users/ResetPassword';
 
 export const routes: RouteObject[] = [
     {
@@ -60,6 +62,14 @@ export const routes: RouteObject[] = [
             {
                 path: 'account/verifyEmail',
                 element: <ConfirmEmail />
+            },
+            {
+                path: 'account/forgotPassword',
+                element: <ForgotPassword />
+            },
+            {
+                path: 'account/resetPassword',
+                element: <ResetPassword />
             },
             {
                 path: '*',

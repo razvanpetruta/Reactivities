@@ -134,6 +134,44 @@ namespace API.Controllers
             return Ok("Email verification link resent");
         }
 
+        [AllowAnonymous]
+        [HttpPost("forgotPassword")]
+        public async Task<IActionResult> ResetPasswordRequest([FromQuery] string email)
+        {
+            AppUser user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return BadRequest("Email not found");
+
+            string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            string encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            string origin = Request.Headers["origin"];
+            string resetPasswordUrl = $"{origin}/account/resetPassword?token={encodedToken}&email={user.Email}";
+
+            string message = $"<p>Please click the below link to reset your password:</p>"
+                           + $"<p><a href='{resetPasswordUrl}'>Reset Password</a></p>";
+
+            await _emailSender.SendEmailAsync(user.Email, "Password Reset Request", message);
+
+            return Ok("Password reset link sent to your email");
+        }
+
+        [AllowAnonymous]
+        [HttpPost("resetPassword")]
+        public async Task<IActionResult> ResetPassword([FromQuery] string token, [FromQuery] string email, [FromBody] ResetPasswordDTO resetPassword)
+        {
+            string decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+
+            AppUser user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return BadRequest("Email not found");
+
+            IdentityResult result = await _userManager.ResetPasswordAsync(user, decodedToken, resetPassword.NewPassword);
+            if (!result.Succeeded)
+                return BadRequest("Could not reset password");
+
+            return Ok("Password reseted successfully");
+        }
+
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<UserDTO>> GetCurrentUser()
