@@ -6,6 +6,7 @@ import { store } from "../stores/store";
 import { IUser, IUserFormValues } from "../models/user";
 import { IPhoto, IUserActivity, Profile } from "../models/profile";
 import { PaginatedResult } from "../models/pagination";
+import { INotification } from "../models/notification";
 
 const sleep = (delay: number): Promise<unknown> => {
     return new Promise((resolve) => {
@@ -107,7 +108,8 @@ const Accounts = {
         requests.get(`/account/resendEmailConfirmationLink?email=${email}`),
     forgotPassword: (email: string) => requests.post<void>(`/account/forgotPassword?email=${email}`, {}),
     resetPassword: (token: string, email: string, newPassword: string) =>
-        requests.post<void>(`/account/resetPassword?token=${token}&email=${email}`, { newPassword: newPassword })
+        requests.post<void>(`/account/resetPassword?token=${token}&email=${email}`, { newPassword: newPassword }),
+    getLatestNotifications: () => requests.get<INotification[]>("/notifications")
 };
 
 const Profiles = {

@@ -115,14 +115,9 @@ export default class ActivityStore {
     };
 
     loadActivity = async (id: string): Promise<Activity | undefined> => {
-        let activity: Activity | undefined = this.getActivity(id);
-        if (activity) {
-            this.selectedActivity = activity;
-            return this.selectedActivity;
-        }
         this.setLoadingInitial(true);
         try {
-            activity = await agent.Activities.details(id);
+            const activity = await agent.Activities.details(id);
             this.setActivity(activity);
             runInAction(() => {
                 this.selectedActivity = activity;

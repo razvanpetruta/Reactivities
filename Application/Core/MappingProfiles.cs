@@ -1,5 +1,6 @@
 using Application.Activities;
 using Application.Comments;
+using Application.Notifications;
 using AutoMapper;
 using Domain;
 
@@ -43,6 +44,12 @@ namespace Application.Core
                 .ForMember(d => d.Category, o => o.MapFrom(s => s.Activity.Category))
                 .ForMember(d => d.Date, o => o.MapFrom(s => s.Activity.Date))
                 .ForMember(d => d.HostUsername, o => o.MapFrom(s => s.Activity.Attendees.FirstOrDefault(aa => aa.IsHost).AppUser.UserName));
+        
+            CreateMap<Notification, NotificationDTO>()
+                .ForMember(d => d.RecipientUsername, o => o.MapFrom(s => s.Recipient.UserName))
+                .ForMember(d => d.RecipientDisplayName, o => o.MapFrom(s => s.Recipient.DisplayName))
+                .ForMember(d => d.SenderUsername, o => o.MapFrom(s => s.Sender.UserName))
+                .ForMember(d => d.SenderDisplayName, o => o.MapFrom(s => s.Sender.DisplayName));
         }
     }
 }

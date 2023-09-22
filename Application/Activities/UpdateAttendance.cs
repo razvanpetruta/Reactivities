@@ -28,7 +28,7 @@ namespace Application.Activities
             {
                 Activity activity = await _context.Activities
                     .Include(a => a.Attendees)
-                    .ThenInclude(aa => aa.AppUser)
+                        .ThenInclude(aa => aa.AppUser)
                     .FirstOrDefaultAsync(a => a.Id == request.Id);
                 if (activity == null)
                     return null;
@@ -37,15 +37,41 @@ namespace Application.Activities
                 if (user == null)
                     return null;
 
-                string hostUsername = activity.Attendees.FirstOrDefault(a => a.IsHost)?.AppUser?.UserName;
+                AppUser host = activity.Attendees.FirstOrDefault(a => a.IsHost).AppUser;
+                string hostUsername = host.UserName;
 
                 ActivityAttendee attendance = activity.Attendees.FirstOrDefault(a => a.AppUser.UserName == user.UserName);
-            
+
                 if (attendance != null && hostUsername == user.UserName)
+                {
                     activity.IsCanceled = !activity.IsCanceled;
+                    
+                    foreach (var attendee in activity.Attendees.Where(a => !a.IsHost))
+                    {
+                        Notification notification = new Notification
+                        {
+                            Recipient = attendee.AppUser,
+                            Sender = user,
+                            Type = activity.IsCanceled ? Utils.Type.ActivityHasBeenCanceled : Utils.Type.ActivityHasBeenReactivated,
+                            ActivityId = activity.Id
+                        };
+                        _context.Notifications.Add(notification);
+                    }
+                }
 
                 if (attendance != null && hostUsername != user.UserName)
+                {
                     activity.Attendees.Remove(attendance);
+
+                    Notification notification = new Notification
+                    {
+                        Recipient = host,
+                        Sender = user,
+                        Type = Utils.Type.LeftActivity,
+                        ActivityId = activity.Id
+                    };
+                    _context.Notifications.Add(notification);
+                }
 
                 if (attendance == null)
                 {
@@ -55,8 +81,16 @@ namespace Application.Activities
                         Activity = activity,
                         IsHost = false
                     };
-
                     activity.Attendees.Add(attendance);
+
+                    Notification notification = new Notification
+                    {
+                        Recipient = host,
+                        Sender = user,
+                        Type = Utils.Type.JoinedActivity,
+                        ActivityId = activity.Id
+                    };
+                    _context.Notifications.Add(notification);
                 }
 
                 bool result = await _context.SaveChangesAsync() > 0;

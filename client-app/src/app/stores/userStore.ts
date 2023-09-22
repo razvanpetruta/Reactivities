@@ -3,10 +3,13 @@ import { IUser, IUserFormValues } from "../models/user";
 import agent from "../api/agent";
 import { store } from "./store";
 import { router } from "../router/Routes";
+import { INotification } from "../models/notification";
 
 export default class UserStore {
     user: IUser | null = null;
     refreshTokenTimeout?: NodeJS.Timeout;
+    loadingNotifications: boolean = false;
+    getNotificationsTimeout?: NodeJS.Timeout;
 
     constructor() {
         makeAutoObservable(this);
@@ -21,7 +24,13 @@ export default class UserStore {
             const user: IUser = await agent.Accounts.login(credentials);
             store.commonStore.setToken(user.token);
             this.startRefreshTokenTimer(user);
-            runInAction(() => this.user = user);
+            this.startGetNotificationsTimer();
+            runInAction(() => {
+                user.notifications.forEach((notification: INotification) => {
+                    notification.date = new Date(notification.date);
+                });
+                this.user = user;
+            });
             router.navigate("/activities");
             store.modalStore.closeModal();
         } catch (error) {
@@ -53,9 +62,30 @@ export default class UserStore {
             const user: IUser = await agent.Accounts.current();
             store.commonStore.setToken(user.token);
             this.startRefreshTokenTimer(user);
-            runInAction(() => this.user = user);
+            this.startGetNotificationsTimer();
+            runInAction(() => {
+                user.notifications.forEach((notification: INotification) => {
+                    notification.date = new Date(notification.date);
+                });
+                this.user = user;
+            });
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    getLatestNotifications = async (): Promise<void> => {
+        this.loadingNotifications = true;
+        try {
+            const notifications: INotification[] = await agent.Accounts.getLatestNotifications();
+            notifications.forEach((notification: INotification) => {
+                notification.date = new Date(notification.date);
+            });
+            runInAction(() => this.user!.notifications = notifications);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            runInAction(() => this.loadingNotifications = false);
         }
     }
 
@@ -85,6 +115,20 @@ export default class UserStore {
         }
     }
 
+    refreshNotifications = async () => {
+        this.stopGetNotificationTimer();
+        try {
+            const notifications: INotification[] = await agent.Accounts.getLatestNotifications();
+            notifications.forEach((notification: INotification) => {
+                notification.date = new Date(notification.date);
+            });
+            runInAction(() => this.user!.notifications = notifications);
+            this.startGetNotificationsTimer();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     private startRefreshTokenTimer(user: IUser) {
         const jwtToken = JSON.parse(atob(user.token.split(".")[1]));
         const expires = new Date(jwtToken.exp * 1000);
@@ -94,5 +138,13 @@ export default class UserStore {
 
     private stopRefreshTokenTimer() {
         clearTimeout(this.refreshTokenTimeout);
+    }
+
+    private startGetNotificationsTimer() {
+        this.getNotificationsTimeout = setTimeout(this.refreshNotifications, 5 * 60 * 1000);
+    }
+
+    private stopGetNotificationTimer() {
+        clearTimeout(this.getNotificationsTimeout);
     }
 }

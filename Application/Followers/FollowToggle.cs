@@ -42,8 +42,15 @@ namespace Application.Followers
                         Observer = observer,
                         Target = target
                     };
-
                     _dataContext.UserFollowings.Add(following);
+
+                    Notification notification = new Notification
+                    {
+                        Recipient = target,
+                        Sender = observer,
+                        Type = Utils.Type.StartedFollowing
+                    };
+                    _dataContext.Notifications.Add(notification);
                 }
                 else
                 {

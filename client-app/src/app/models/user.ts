@@ -1,8 +1,11 @@
+import { INotification } from "./notification";
+
 export interface IUser {
     username: string;
     displayName: string;
     token: string;
     image?: string;
+    notifications: INotification[];
 }
 
 export interface IUserFormValues {

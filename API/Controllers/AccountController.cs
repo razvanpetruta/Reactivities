@@ -2,6 +2,8 @@ using System.Security.Claims;
 using System.Text;
 using API.DTOs;
 using API.Services;
+using Application.Notifications;
+using AutoMapper;
 using Domain;
 using Infrastructure.Email;
 using Microsoft.AspNetCore.Authorization;
@@ -20,14 +22,16 @@ namespace API.Controllers
         private readonly TokenService _tokenService;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly EmailSender _emailSender;
+        private readonly IMapper _mapper;
         public AccountController(UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager, TokenService tokenService,
-            EmailSender emailSender)
+            EmailSender emailSender, IMapper mapper)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenService = tokenService;
             _emailSender = emailSender;
+            _mapper = mapper;
         }
 
         [AllowAnonymous]
@@ -36,12 +40,14 @@ namespace API.Controllers
         {
             AppUser user = await _userManager.Users
                 .Include(u => u.Photos)
+                .Include(u => u.Notifications)
+                    .ThenInclude(n => n.Sender)
                 .FirstOrDefaultAsync(u => u.Email == loginDTO.Email);
 
             if (user == null)
                 return Unauthorized("Invalid email");
 
-            if (user.UserName == "bob")
+            if (user.UserName == "bob" || user.UserName == "tom" || user.UserName == "jane")
                 user.EmailConfirmed = true;
 
             if (!user.EmailConfirmed)
@@ -178,6 +184,8 @@ namespace API.Controllers
         {
             AppUser user = await _userManager.Users
                 .Include(u => u.Photos)
+                .Include(u => u.Notifications)
+                    .ThenInclude(n => n.Sender)
                 .FirstOrDefaultAsync(u => u.Email == User.FindFirstValue(ClaimTypes.Email));
 
             await SetRefreshToken(user);
@@ -215,7 +223,8 @@ namespace API.Controllers
                 DisplayName = user.DisplayName,
                 Image = user?.Photos?.FirstOrDefault(p => p.IsMain)?.Url,
                 Token = _tokenService.CreateToken(user),
-                Username = user.UserName
+                Username = user.UserName,
+                Notifications = _mapper.Map<List<NotificationDTO>>(user.Notifications.OrderByDescending(n => n.Date).ToList())
             };
         }
 
